@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Afiações by Cris</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink: #E91E8C;
+  --pink-light: #FCE4F3;
+  --pink-mid: #F06AB0;
+  --pink-dark: #C0176E;
+  --pink-soft: #FDF0F8;
+  --white: #FFFFFF;
+  --bg: #FDF5FA;
+  --surface: #FFFFFF;
+  --border: #F0D6EA;
+  --text: #2D1A26;
+  --text2: #8A5A7A;
+  --text3: #BFA0B5;
+  --green: #1A9E6A;
+  --green-light: #E3F5EE;
+  --amber: #C47A00;
+  --amber-light: #FFF4DC;
+  --red: #D93025;
+  --red-light: #FDECEA;
+  --blue: #1565C0;
+  --blue-light: #E3EEFF;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 12px rgba(233,30,140,0.08);
+  --shadow-lg: 0 8px 32px rgba(233,30,140,0.15);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ── LOGIN ── */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(160deg, #FCE4F3 0%, #FDF5FA 50%, #FFF0F8 100%);
+}
+
+.login-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 36px 28px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-logo .scissors { font-size: 44px; margin-bottom: 8px; }
+
+.login-logo h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  color: var(--pink);
+  line-height: 1.2;
+}
+
+.login-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.login-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 20px 0;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 11px 14px;
+  font-size: 15px;
+  font-family: 'Nunito', sans-serif;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  margin-bottom: 14px;
+  -webkit-appearance: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--pink-mid);
+  box-shadow: 0 0 0 3px rgba(233,30,140,0.1);
+}
+
+textarea { resize: vertical; min-height: 70px; }
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%); color: #fff; box-shadow: 0 4px 14px rgba(233,30,140,0.3); }
+.btn-primary:hover { box-shadow: 0 6px 20px rgba(233,30,140,0.4); }
+.btn-secondary { background: var(--pink-light); color: var(--pink-dark); border: 1.5px solid var(--border); }
+.btn-ghost { background: transparent; color: var(--text2); border: 1.5px solid var(--border); }
+.btn-sm { padding: 8px 14px; font-size: 13px; width: auto; border-radius: 8px; }
+.btn-danger { background: var(--red-light); color: var(--red); }
+.btn-green { background: var(--green-light); color: var(--green); }
+
+.error-msg {
+  background: var(--red-light);
+  color: var(--red);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: none;
+}
+
+/* ── CONFIG ── */
+#config-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(160deg, #FCE4F3 0%, #FDF5FA 100%);
+}
+
+.config-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+
+.config-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--pink);
+  margin-bottom: 6px;
+}
+
+.config-card p { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+
+.step-hint {
+  background: var(--pink-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+/* ── APP ── */
+#app { display: none; min-height: 100vh; flex-direction: column; }
+
+.app-header {
+  background: var(--white);
+  border-bottom: 1.5px solid var(--border);
+  padding: 12px 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(233,30,140,0.06);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.header-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--pink);
+  line-height: 1.1;
+}
+
+.header-logo span { display: block; font-size: 10px; font-family: 'Nunito', sans-serif; color: var(--text3); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+
+.header-right { display: flex; align-items: center; gap: 10px; }
+
+.sync-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--pink-soft);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+}
+
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.sync-dot.syncing { background: var(--amber); animation: pulse 1s infinite; }
+.sync-dot.error { background: var(--red); }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.logout-btn {
+  background: var(--pink-light);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pink-dark);
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+}
+
+.tab-bar { display: flex; }
+
+.tab {
+  flex: 1;
+  padding: 8px 4px 11px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text3);
+  cursor: pointer;
+  border-bottom: 2.5px solid transparent;
+  transition: all .15s;
+  user-select: none;
+}
+
+.tab.active { color: var(--pink); border-bottom-color: var(--pink); }
+.tab-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+
+/* ── PAGES ── */
+.page { display: none; padding: 16px; padding-bottom: 80px; }
+.page.active { display: block; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pink);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── METRICS ── */
+.metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+
+.metric {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+
+.metric-label { font-size: 11px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+.metric-value { font-size: 26px; font-weight: 800; line-height: 1; }
+.mv-pink { color: var(--pink); }
+.mv-green { color: var(--green); }
+.mv-amber { color: var(--amber); }
+.mv-blue { color: var(--blue); }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.b-pago { background: var(--green-light); color: var(--green); }
+.b-pendente { background: var(--amber-light); color: var(--amber); }
+.b-emprestado { background: var(--blue-light); color: var(--blue); }
+.b-afiac { background: var(--pink-light); color: var(--pink-dark); }
+.b-venda { background: #F3E8FF; color: #6B21A8; }
+
+/* ── LIST ITEMS ── */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 10px;
+}
+
+.list-item:last-child { border-bottom: none; padding-bottom: 0; }
+.list-item:first-child { padding-top: 0; }
+
+.item-name { font-weight: 700; font-size: 14px; }
+.item-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.item-tiny { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.item-right { text-align: right; flex-shrink: 0; }
+.item-value { font-weight: 800; font-size: 15px; color: var(--pink-dark); margin-bottom: 4px; }
+
+.empty { text-align: center; padding: 28px 16px; color: var(--text3); font-size: 13px; }
+.empty-icon { font-size: 32px; display: block; margin-bottom: 8px; }
+
+/* ── FORM ── */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--white);
+  margin-bottom: 14px;
+}
+
+.counter-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: var(--pink-light);
+  color: var(--pink-dark);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  transition: background .15s;
+}
+
+.counter-btn:active { background: var(--border); }
+.counter-val { flex: 1; text-align: center; font-size: 20px; font-weight: 800; color: var(--text); }
+
+/* PRICE PREVIEW */
+.price-preview {
+  background: linear-gradient(135deg, var(--pink-soft) 0%, #FFF0FA 100%);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin: 10px 0 14px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+
+.price-row:last-child { margin-bottom: 0; }
+.price-total { font-size: 18px; font-weight: 800; color: var(--pink-dark); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+
+/* STOCK */
+.stock-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.stock-row:last-child { border-bottom: none; }
+.stock-modelo { font-weight: 700; font-size: 14px; }
+.stock-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.stock-num { font-size: 22px; font-weight: 800; }
+.sn-ok { color: var(--green); }
+.sn-low { color: var(--amber); }
+.sn-zero { color: var(--red); }
+
+/* TOGGLE */
+.toggle-btn {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  background: var(--pink-light);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  cursor: pointer;
+  color: var(--pink-dark);
+  transition: all .15s;
+}
+
+/* AVATAR */
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-light) 0%, #FDD6EE 100%);
+  color: var(--pink-dark);
+  font-weight: 800;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+}
+
+/* SEARCH */
+.search-wrap { position: relative; margin-bottom: 12px; }
+.search-wrap input { padding-left: 38px; margin-bottom: 0; }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--text3); pointer-events: none; }
+
+/* SECTION TITLE */
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin: 18px 0 8px;
+}
+
+/* MODAL */
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(45,26,38,0.45);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.modal-bg.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 36px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+.modal-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.modal-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--pink-dark); }
+.modal-close { font-size: 20px; cursor: pointer; color: var(--text3); background: var(--pink-light); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 76px;
+  left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--text);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0;
+  transition: all .25s;
+  z-index: 999;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.pink { background: var(--pink); }
+.toast.red { background: var(--red); }
+
+/* DETAIL */
+.detail-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.detail-row:last-child { border-bottom: none; }
+.detail-key { color: var(--text3); font-weight: 700; min-width: 76px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; padding-top: 2px; }
+
+/* NEW SERVICE CHIPS */
+.chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.chip {
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .15s;
+}
+.chip.active { background: var(--pink); color: #fff; border-color: var(--pink); }
+
+/* MODELO GRID */
+.modelo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.modelo-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--white);
+}
+.modelo-card.active { border-color: var(--pink); background: var(--pink-light); }
+.modelo-card .mc-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.modelo-card .mc-price { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.modelo-card.active .mc-name { color: var(--pink-dark); }
+.modelo-card.active .mc-price { color: var(--pink); }
+
+.qty-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.qty-row:last-child { border-bottom: none; }
+.qty-label { font-size: 13px; font-weight: 600; flex: 1; }
+.qty-price { font-size: 12px; color: var(--text3); margin-right: 12px; }
+
+/* pink gradient header card */
+.hero-card {
+  background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  margin-bottom: 14px;
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-card .hero-label { font-size: 11px; font-weight: 700; opacity: 0.8; text-transform: uppercase; letter-spacing: .06em; }
+.hero-card .hero-value { font-size: 36px; font-weight: 800; line-height: 1.1; margin: 4px 0 2px; }
+.hero-card .hero-sub { font-size: 12px; opacity: 0.75; }
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="scissors">✂️</div>
+      <h1>Afiações by Cris</h1>
+      <p>Sistema de gestão</p>
+    </div>
+    <div id="login-error" class="error-msg">Senha incorreta. Tente novamente.</div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="login-senha" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')fazerLogin()">
+    </div>
+    <button class="btn btn-primary" onclick="fazerLogin()">🔐 Entrar</button>
+  </div>
+</div>
+
+<!-- ── CONFIG ── -->
+<div id="config-screen" style="display:none">
+  <div class="config-card">
+    <h2>✂️ Configuração inicial</h2>
+    <p>Primeira vez? Informe a URL do Apps Script e crie sua senha de acesso.</p>
+
+    <div class="step-hint"><span>📋</span><span>Cole a URL do Web App gerada no Google Apps Script.</span></div>
+
+    <div class="field">
+      <label>URL do Apps Script</label>
+      <input type="url" id="cfg-url" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
+    <div class="field">
+      <label>Criar senha de acesso</label>
+      <input type="password" id="cfg-senha" placeholder="Escolha uma senha">
+    </div>
+    <div class="field">
+      <label>Confirmar senha</label>
+      <input type="password" id="cfg-senha2" placeholder="Repita a senha">
+    </div>
+    <div id="cfg-error" class="error-msg">As senhas não coincidem.</div>
+    <button class="btn btn-primary" onclick="salvarConfig()">✓ Salvar e entrar</button>
+    <div style="text-align:center;margin-top:14px">
+      <button class="btn btn-ghost btn-sm" onclick="voltarLogin()" style="width:auto;display:inline-flex">← Voltar ao login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app">
+  <div class="app-header">
+    <div class="header-top">
+      <div class="header-logo">
+        Afiações by Cris
+        <span>gestão de serviços</span>
+      </div>
+      <div class="header-right">
+        <div class="sync-pill">
+          <div class="sync-dot" id="sync-dot"></div>
+          <span id="sync-status">ok</span>
+        </div>
+        <button class="logout-btn" onclick="logout()">Sair</button>
+      </div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab active" onclick="showPage('inicio')"><span class="tab-icon">🏠</span>Início</div>
+      <div class="tab" onclick="showPage('servicos')"><span class="tab-icon">✂️</span>Serviços</div>
+      <div class="tab" onclick="showPage('clientes')"><span class="tab-icon">👥</span>Clientes</div>
+      <div class="tab" onclick="showPage('estoque')"><span class="tab-icon">📦</span>Estoque</div>
+    </div>
+  </div>
+
+  <!-- INÍCIO -->
+  <div class="page active" id="page-inicio">
+    <div class="hero-card">
+      <div class="hero-label">Faturamento hoje</div>
+      <div class="hero-value" id="m-faturamento">R$ 0,00</div>
+      <div class="hero-sub" id="m-servicos-hoje">0 serviços realizados</div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-label">A receber</div>
+        <div class="metric-value mv-amber" id="m-receber">R$ 0</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Emprestados</div>
+        <div class="metric-value mv-blue" id="m-emprestados">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📍 Alicates emprestados</div>
+      <div id="lista-emprestados-home"><div class="empty"><span class="empty-icon">📍</span>Nenhum alicate emprestado</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💰 Pendências (a receber)</div>
+      <div id="lista-pendencias"><div class="empty"><span class="empty-icon">✅</span>Tudo em dia!</div></div>
+    </div>
+  </div>
+
+  <!-- SERVIÇOS -->
+  <div class="page" id="page-servicos">
+
+    <!-- NOVO SERVIÇO -->
+    <div class="card">
+      <div class="card-title">➕ Novo serviço</div>
+
+      <div class="field">
+        <label>Cliente</label>
+        <select id="s-cliente">
+          <option value="">Selecione ou cadastre abaixo...</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>O que foi feito?</label>
+        <div class="chip-group" id="tipo-chips">
+          <div class="chip active" data-tipo="afiac" onclick="selecionarTipo(this)">✂️ Afiação</div>
+          <div class="chip" data-tipo="molinha" onclick="selecionarTipo(this)">🔧 Molinha</div>
+          <div class="chip" data-tipo="venda" onclick="selecionarTipo(this)">🛍️ Venda alicate</div>
+        </div>
+      </div>
+
+      <!-- AFIAÇÃO -->
+      <div id="bloco-afiac">
+        <label>Quantidade de afiações</label>
+        <div class="counter">
+          <button class="counter-btn" onclick="ajustarQtd('afiac',-1)">−</button>
+          <div class="counter-val" id="qtd-afiac">1</div>
+          <button class="counter-btn" onclick="ajustarQtd('afiac',1)">+</button>
+        </div>
+      </div>
+
+      <!-- MOLINHA -->
+      <div id="bloco-molinha" style="display:none">
+        <label>Quantidade de molinhas</label>
+        <div class="counter">
+          <button class="counter-btn" onclick="ajustarQtd('molinha',-1)">−</button>
+          <div class="counter-val" id="qtd-molinha">1</div>
+          <button class="counter-btn" onclick="ajustarQtd('molinha',1)">+</button>
+        </div>
+      </div>
+
+      <!-- VENDA -->
+      <div id="bloco-venda" style="display:none">
+        <label>Modelos vendidos</label>
+        <div class="modelo-grid">
+          <div class="modelo-card" data-modelo="Mundial 777" data-preco="45" onclick="toggleModelo(this)">
+            <div class="mc-name">777</div>
+            <div class="mc-price">R$ 45</div>
+          </div>
+          <div class="modelo-card" data-modelo="Mundial 722" data-preco="60" onclick="toggleModelo(this)">
+            <div class="mc-name">722</div>
+            <div class="mc-price">R$ 60</div>
+          </div>
+          <div class="modelo-card" data-modelo="Mundial 775" data-preco="45" onclick="toggleModelo(this)">
+            <div class="mc-name">775</div>
+            <div class="mc-price">R$ 45</div>
+          </div>
+        </div>
+        <div id="qtds-modelo"></div>
+      </div>
+
+      <!-- PREVIEW VALOR -->
+      <div class="price-preview" id="price-preview">
+        <div id="price-rows"></div>
+        <div class="price-row price-total">
+          <span>Total</span>
+          <span id="price-total">R$ 0,00</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Pagamento</label>
+        <select id="s-pagamento">
+          <option>Pix</option>
+          <option>Dinheiro</option>
+          <option>Cartão crédito</option>
+          <option>Cartão débito</option>
+          <option>A receber</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Observação (opcional)</label>
+        <input type="text" id="s-obs" placeholder="Ex: 3x no cartão, aguardando...">
+      </div>
+
+      <button class="btn btn-primary" onclick="addServico()">✓ Registrar serviço</button>
+    </div>
+
+    <!-- EMPRÉSTIMO -->
+    <div class="card">
+      <div class="card-title">📍 Registrar alicate emprestado</div>
+      <div class="field">
+        <label>Cliente</label>
+        <select id="e-cliente"><option value="">Selecione...</option></select>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label>Modelo</label>
+          <select id="e-modelo">
+            <option value="">Selecione...</option>
+            <option>Mundial 777</option>
+            <option>Mundial 722</option>
+            <option>Mundial 775</option>
+            <option>Mundial 522</option>
+            <option>Mundial 772</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Qtd</label>
+          <input type="number" id="e-qtd-emp" value="1" min="1">
+        </div>
+      </div>
+      <div class="field">
+        <label>Observação / onde está</label>
+        <input type="text" id="e-obs-emp" placeholder="Ex: casa dela para testar">
+      </div>
+      <button class="btn btn-secondary" onclick="addEmprestimo()">📍 Registrar empréstimo</button>
+    </div>
+
+    <!-- HISTÓRICO -->
+    <div class="section-label">Histórico de serviços</div>
+    <div class="card">
+      <div id="lista-servicos"><div class="empty"><span class="empty-icon">✂️</span>Nenhum serviço ainda</div></div>
+    </div>
+  </div>
+
+  <!-- CLIENTES -->
+  <div class="page" id="page-clientes">
+    <div class="card">
+      <div class="card-title">➕ Nova cliente</div>
+      <div class="field">
+        <label>Nome completo</label>
+        <input type="text" id="c-nome" placeholder="Nome da cliente">
+      </div>
+      <div class="field">
+        <label>Telefone / WhatsApp</label>
+        <input type="tel" id="c-tel" placeholder="(31) 99999-0000">
+      </div>
+      <div class="field">
+        <label>Bairro / Referência</label>
+        <input type="text" id="c-local" placeholder="Ex: Iguaçu, do lado do posto">
+      </div>
+      <div class="field">
+        <label>Observação</label>
+        <textarea id="c-obs" placeholder="Informações úteis..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="addCliente()">💾 Salvar cliente</button>
+    </div>
+
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Buscar cliente..." oninput="renderClientes(this.value)">
+    </div>
+
+    <div id="lista-clientes"><div class="empty"><span class="empty-icon">👥</span>Nenhuma cliente ainda</div></div>
+  </div>
+
+  <!-- ESTOQUE -->
+  <div class="page" id="page-estoque">
+    <div class="card">
+      <div class="card-title">➕ Entrada de estoque</div>
+      <div class="row-2">
+        <div class="field">
+          <label>Modelo</label>
+          <select id="est-modelo">
+            <option value="">Selecione...</option>
+            <option>Mundial 777</option>
+            <option>Mundial 722</option>
+            <option>Mundial 775</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Quantidade</label>
+          <input type="number" id="est-qtd" value="1" min="1">
+        </div>
+      </div>
+      <div class="field">
+        <label>Custo unitário (R$) — opcional</label>
+        <input type="number" id="est-custo" placeholder="0,00" step="0.50">
+      </div>
+      <button class="btn btn-primary" onclick="addEstoque()">📦 Registrar entrada</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Estoque atual</div>
+      <div id="resumo-estoque"><div class="empty">Nenhum registro ainda</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Entradas registradas</div>
+      <div id="lista-estoque"><div class="empty">Nenhum registro ainda</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CLIENTE -->
+<div class="modal-bg" id="modal-cliente">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="modal-nome">Cliente</div>
+      <button class="modal-close" onclick="fecharModal('modal-cliente')">✕</button>
+    </div>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── PREÇOS ──
+const PRECOS = { afiac: 15, molinha: 5, 'Mundial 777': 45, 'Mundial 722': 60, 'Mundial 775': 45 };
+const MODELOS_VENDA = ['Mundial 777','Mundial 722','Mundial 775'];
+
+let CFG = {};
+let DATA = { clientes: [], servicos: [], emprestimos: [], estoque: [] };
+let tipoAtual = 'afiac';
+let modelosSelecionados = {}; // { modelo: qtd }
+
+// ── CONFIG / LOGIN ──
+function carregarConfig() {
+  try { const s = localStorage.getItem('cris-cfg'); if (s) CFG = JSON.parse(s); } catch(e) {}
+}
+
+function salvarConfig() {
+  const url = document.getElementById('cfg-url').value.trim();
+  const s1 = document.getElementById('cfg-senha').value;
+  const s2 = document.getElementById('cfg-senha2').value;
+  const err = document.getElementById('cfg-error');
+  if (!url) return toast('Informe a URL do Apps Script', 'red');
+  if (!s1) return toast('Crie uma senha', 'red');
+  if (s1 !== s2) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  CFG = { url, senha: btoa(s1) };
+  localStorage.setItem('cris-cfg', JSON.stringify(CFG));
+  document.getElementById('config-screen').style.display = 'none';
+  iniciarApp();
+}
+
+function fazerLogin() {
+  const s = document.getElementById('login-senha').value;
+  const err = document.getElementById('login-error');
+  if (!CFG.url) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('config-screen').style.display = 'flex';
+    return;
+  }
+  if (btoa(s) === CFG.senha) {
+    err.style.display = 'none';
+    document.getElementById('login-screen').style.display = 'none';
+    iniciarApp();
+  } else {
+    err.style.display = 'block';
+    document.getElementById('login-senha').value = '';
+  }
+}
+
+function voltarLogin() {
+  document.getElementById('config-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+function logout() {
+  if (!confirm('Sair do app?')) return;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-senha').value = '';
+}
+
+// ── SYNC ──
+function setSyncStatus(s) {
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-status');
+  dot.className = 'sync-dot' + (s==='syncing'?' syncing':s==='error'?' error':'');
+  txt.textContent = s==='syncing'?'salvando...':s==='error'?'erro':'ok';
+}
+
+async function fetchData() {
+  if (!CFG.url) return;
+  setSyncStatus('syncing');
+  try {
+    const r = await fetch(CFG.url);
+    const d = await r.json();
+    if (d.Clientes) DATA.clientes = d.Clientes.map(normalizeCliente);
+    if (d.Servicos) DATA.servicos = d.Servicos.map(normalizeServico);
+    if (d.Emprestimos) DATA.emprestimos = d.Emprestimos.map(normalizeEmp);
+    if (d.Estoque) DATA.estoque = d.Estoque.map(normalizeEstoque);
+    setSyncStatus('ok');
+    renderAll();
+  } catch(e) { setSyncStatus('error'); toast('Erro ao carregar dados','red'); }
+}
+
+async function postData(payload) {
+  setSyncStatus('syncing');
+  try {
+    await fetch(CFG.url, { method:'POST', body: JSON.stringify(payload), headers:{'Content-Type':'text/plain'} });
+    setSyncStatus('ok');
+  } catch(e) { setSyncStatus('error'); }
+}
+
+// ── NORMALIZE ──
+function normalizeCliente(r) {
+  return { id:str(r.id||r.ID), nome:str(r.nome||r.Nome), tel:str(r.tel||r.Tel), local:str(r.local||r.Local), obs:str(r.obs||r.Obs), data:str(r.data||r.Data) };
+}
+function normalizeServico(r) {
+  return { id:str(r.id||r.ID), clienteNome:str(r.clienteNome||r.ClienteNome), tipo:str(r.tipo||r.Tipo), descricao:str(r.descricao||r.Descricao), valor:parseFloat(r.valor||r.Valor||0), pagamento:str(r.pagamento||r.Pagamento), pago:String(r.pago||r.Pago||'')!=='false'&&String(r.pago||r.Pago||'')!=='FALSE', data:str(r.data||r.Data), hora:str(r.hora||r.Hora), obs:str(r.obs||r.Obs) };
+}
+function normalizeEmp(r) {
+  return { id:str(r.id||r.ID), clienteNome:str(r.clienteNome||r.ClienteNome), modelo:str(r.modelo||r.Modelo), qtd:parseInt(r.qtd||r.Qtd||1), obs:str(r.obs||r.Obs), data:str(r.data||r.Data), devolveu: String(r.devolveu||r.Devolveu||'false')==='true'||String(r.devolveu||r.Devolveu||'false')==='TRUE' };
+}
+function normalizeEstoque(r) {
+  return { id:str(r.id||r.ID), modelo:str(r.modelo||r.Modelo), qtd:parseInt(r.qtd||r.Qtd||0), custo:parseFloat(r.custo||r.Custo||0), data:str(r.data||r.Data) };
+}
+function str(v) { return v===undefined||v===null?'':String(v); }
+
+function uid() { return Date.now()+Math.random().toString(36).slice(2,6); }
+function hoje() { return new Date().toLocaleDateString('pt-BR'); }
+function agora() { return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function fmt(v) { return 'R$ '+v.toFixed(2).replace('.',','); }
+
+// ── TIPO CHIPS ──
+function selecionarTipo(el) {
+  document.querySelectorAll('#tipo-chips .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  tipoAtual = el.dataset.tipo;
+  document.getElementById('bloco-afiac').style.display = tipoAtual==='afiac'?'block':'none';
+  document.getElementById('bloco-molinha').style.display = tipoAtual==='molinha'?'block':'none';
+  document.getElementById('bloco-venda').style.display = tipoAtual==='venda'?'block':'none';
+  modelosSelecionados = {};
+  atualizarModeloQtds();
+  calcularTotal();
+}
+
+// ── CONTADOR ──
+let qtds = { afiac: 1, molinha: 1 };
+function ajustarQtd(tipo, delta) {
+  qtds[tipo] = Math.max(1, (qtds[tipo]||1) + delta);
+  document.getElementById('qtd-'+tipo).textContent = qtds[tipo];
+  calcularTotal();
+}
+
+// ── MODELOS VENDA ──
+function toggleModelo(el) {
+  const m = el.dataset.modelo;
+  if (modelosSelecionados[m]) {
+    delete modelosSelecionados[m];
+    el.classList.remove('active');
+  } else {
+    modelosSelecionados[m] = 1;
+    el.classList.add('active');
+  }
+  atualizarModeloQtds();
+  calcularTotal();
+}
+
+function atualizarModeloQtds() {
+  const container = document.getElementById('qtds-modelo');
+  const modelos = Object.keys(modelosSelecionados);
+  if (!modelos.length) { container.innerHTML = ''; return; }
+  container.innerHTML = modelos.map(m => `
+    <div class="qty-row">
+      <span class="qty-label">${m}</span>
+      <span class="qty-price">${fmt(PRECOS[m])} cada</span>
+      <div class="counter" style="margin:0;width:120px;height:36px">
+        <button class="counter-btn" style="height:36px;width:36px;font-size:18px" onclick="ajustarModeloQtd('${m}',-1)">−</button>
+        <div class="counter-val" style="font-size:16px" id="mq-${m.replace(/ /g,'_')}">${modelosSelecionados[m]}</div>
+        <button class="counter-btn" style="height:36px;width:36px;font-size:18px" onclick="ajustarModeloQtd('${m}',1)">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function ajustarModeloQtd(modelo, delta) {
+  modelosSelecionados[modelo] = Math.max(1, (modelosSelecionados[modelo]||1)+delta);
+  document.getElementById('mq-'+modelo.replace(/ /g,'_')).textContent = modelosSelecionados[modelo];
+  calcularTotal();
+}
+
+function calcularTotal() {
+  let rows = [];
+  let total = 0;
+
+  if (tipoAtual === 'afiac') {
+    const q = qtds.afiac;
+    const v = q * PRECOS.afiac;
+    rows.push(`<div class="price-row"><span>${q}x Afiação</span><span>${fmt(v)}</span></div>`);
+    total += v;
+  } else if (tipoAtual === 'molinha') {
+    const q = qtds.molinha;
+    const v = q * PRECOS.molinha;
+    rows.push(`<div class="price-row"><span>${q}x Molinha</span><span>${fmt(v)}</span></div>`);
+    total += v;
+  } else if (tipoAtual === 'venda') {
+    Object.entries(modelosSelecionados).forEach(([m,q]) => {
+      const v = q * PRECOS[m];
+      rows.push(`<div class="price-row"><span>${q}x ${m}</span><span>${fmt(v)}</span></div>`);
+      total += v;
+    });
+  }
+
+  document.getElementById('price-rows').innerHTML = rows.join('');
+  document.getElementById('price-total').textContent = fmt(total);
+}
+
+function getServicoDescricao() {
+  if (tipoAtual==='afiac') return `${qtds.afiac}x Afiação`;
+  if (tipoAtual==='molinha') return `${qtds.molinha}x Molinha`;
+  if (tipoAtual==='venda') return Object.entries(modelosSelecionados).map(([m,q])=>`${q}x ${m}`).join(', ');
+  return '';
+}
+
+function getServicoValor() {
+  if (tipoAtual==='afiac') return qtds.afiac * PRECOS.afiac;
+  if (tipoAtual==='molinha') return qtds.molinha * PRECOS.molinha;
+  if (tipoAtual==='venda') return Object.entries(modelosSelecionados).reduce((s,[m,q])=>s+q*PRECOS[m],0);
+  return 0;
+}
+
+// ── ADD SERVIÇO ──
+async function addServico() {
+  const cn = document.getElementById('s-cliente').value;
+  if (!cn) return toast('Selecione a cliente','red');
+  if (tipoAtual==='venda' && !Object.keys(modelosSelecionados).length) return toast('Selecione ao menos um modelo','red');
+  const descricao = getServicoDescricao();
+  const valor = getServicoValor();
+  const pagamento = document.getElementById('s-pagamento').value;
+  const s = {
+    id: uid(), clienteNome: cn, tipo: tipoAtual,
+    descricao, valor, pagamento,
+    pago: pagamento !== 'A receber',
+    data: hoje(), hora: agora(),
+    obs: document.getElementById('s-obs').value.trim()
+  };
+  DATA.servicos.push(s);
+
+  // desconta estoque se for venda
+  if (tipoAtual==='venda') {
+    Object.entries(modelosSelecionados).forEach(([m,q])=>{
+      const e = { id:uid(), modelo:m, qtd:-q, custo:0, data:hoje() };
+      DATA.estoque.push(e);
+      postData({ sheet:'Estoque', action:'append', headers:['id','modelo','qtd','custo','data'], row:[e.id,e.modelo,e.qtd,e.custo,e.data] });
+    });
+  }
+
+  renderAll();
+  document.getElementById('s-obs').value='';
+  qtds = {afiac:1,molinha:1};
+  document.getElementById('qtd-afiac').textContent='1';
+  document.getElementById('qtd-molinha').textContent='1';
+  modelosSelecionados={};
+  document.querySelectorAll('.modelo-card').forEach(c=>c.classList.remove('active'));
+  atualizarModeloQtds();
+  calcularTotal();
+  toast('Serviço registrado! '+fmt(valor),'pink');
+  await postData({ sheet:'Servicos', action:'append', headers:['id','clienteNome','tipo','descricao','valor','pagamento','pago','data','hora','obs'], row:[s.id,s.clienteNome,s.tipo,s.descricao,s.valor,s.pagamento,s.pago,s.data,s.hora,s.obs] });
+}
+
+async function togglePago(id) {
+  const s = DATA.servicos.find(s=>s.id===id);
+  if (!s) return;
+  s.pago=!s.pago; s.pagamento=s.pago?'Pix':'A receber';
+  renderAll();
+  toast(s.pago?'Marcado como pago ✓':'Desmarcado');
+  await postData({ sheet:'Servicos', action:'update', id, headers:['id','clienteNome','tipo','descricao','valor','pagamento','pago','data','hora','obs'], row:[s.id,s.clienteNome,s.tipo,s.descricao,s.valor,s.pagamento,s.pago,s.data,s.hora,s.obs] });
+}
+
+async function addEmprestimo() {
+  const cn = document.getElementById('e-cliente').value;
+  const modelo = document.getElementById('e-modelo').value;
+  if (!cn) return toast('Selecione a cliente','red');
+  if (!modelo) return toast('Selecione o modelo','red');
+  const e = { id:uid(), clienteNome:cn, modelo, qtd:parseInt(document.getElementById('e-qtd-emp').value)||1, obs:document.getElementById('e-obs-emp').value.trim(), data:hoje(), devolveu:false };
+  DATA.emprestimos.push(e);
+  renderAll();
+  document.getElementById('e-obs-emp').value='';
+  toast('Empréstimo registrado');
+  await postData({ sheet:'Emprestimos', action:'append', headers:['id','clienteNome','modelo','qtd','obs','data','devolveu'], row:[e.id,e.clienteNome,e.modelo,e.qtd,e.obs,e.data,e.devolveu] });
+}
+
+async function marcarDevolveu(id) {
+  const e = DATA.emprestimos.find(e=>e.id===id);
+  if (!e) return;
+  e.devolveu=true;
+  renderAll();
+  toast('Alicate devolvido ✓');
+  await postData({ sheet:'Emprestimos', action:'update', id, headers:['id','clienteNome','modelo','qtd','obs','data','devolveu'], row:[e.id,e.clienteNome,e.modelo,e.qtd,e.obs,e.data,e.devolveu] });
+}
+
+async function addCliente() {
+  const nome = document.getElementById('c-nome').value.trim();
+  if (!nome) return toast('Informe o nome','red');
+  const c = { id:uid(), nome, tel:document.getElementById('c-tel').value.trim(), local:document.getElementById('c-local').value.trim(), obs:document.getElementById('c-obs').value.trim(), data:hoje() };
+  DATA.clientes.push(c);
+  renderAll();
+  ['c-nome','c-tel','c-local','c-obs'].forEach(id=>document.getElementById(id).value='');
+  toast('Cliente salva! 💕','pink');
+  await postData({ sheet:'Clientes', action:'append', headers:['id','nome','tel','local','obs','data'], row:[c.id,c.nome,c.tel,c.local,c.obs,c.data] });
+}
+
+async function addEstoque() {
+  const modelo = document.getElementById('est-modelo').value;
+  if (!modelo) return toast('Selecione o modelo','red');
+  const e = { id:uid(), modelo, qtd:parseInt(document.getElementById('est-qtd').value)||1, custo:parseFloat(document.getElementById('est-custo').value)||0, data:hoje() };
+  DATA.estoque.push(e);
+  renderAll();
+  document.getElementById('est-custo').value='';
+  document.getElementById('est-qtd').value='1';
+  toast('Entrada registrada');
+  await postData({ sheet:'Estoque', action:'append', headers:['id','modelo','qtd','custo','data'], row:[e.id,e.modelo,e.qtd,e.custo,e.data] });
+}
+
+// ── RENDER ──
+function renderAll() {
+  renderInicio();
+  renderServicos();
+  renderClientes();
+  renderEstoque();
+  populateSelects();
+  calcularTotal();
+}
+
+function renderInicio() {
+  const h = hoje();
+  const servicosHoje = DATA.servicos.filter(s=>s.data===h);
+  const fat = servicosHoje.reduce((s,v)=>s+(v.pago?v.valor:0),0);
+  const receber = DATA.servicos.filter(s=>!s.pago).reduce((s,v)=>s+v.valor,0);
+  const empAtivos = DATA.emprestimos.filter(e=>!e.devolveu);
+
+  document.getElementById('m-faturamento').textContent = fmt(fat);
+  document.getElementById('m-servicos-hoje').textContent = servicosHoje.length+' serviço(s) realizados';
+  document.getElementById('m-receber').textContent = fmt(receber);
+  document.getElementById('m-emprestados').textContent = empAtivos.length;
+
+  const le = document.getElementById('lista-emprestados-home');
+  if (!empAtivos.length) { le.innerHTML='<div class="empty"><span class="empty-icon">📍</span>Nenhum alicate emprestado</div>'; }
+  else {
+    le.innerHTML = empAtivos.map(e=>`
+      <div class="list-item">
+        <div class="item-main">
+          <div class="item-name">${e.clienteNome}</div>
+          <div class="item-sub">${e.qtd}x ${e.modelo}</div>
+          ${e.obs?`<div class="item-tiny">${e.obs}</div>`:''}
+        </div>
+        <div class="item-right">
+          <span class="badge b-emprestado">emprestado</span><br>
+          <div class="item-tiny" style="margin-top:4px">${e.data}</div>
+          <button class="btn btn-green btn-sm" style="margin-top:6px" onclick="marcarDevolveu('${e.id}')">devolveu</button>
+        </div>
+      </div>`).join('');
+  }
+
+  const lp = document.getElementById('lista-pendencias');
+  const pendentes = DATA.servicos.filter(s=>!s.pago);
+  if (!pendentes.length) { lp.innerHTML='<div class="empty"><span class="empty-icon">✅</span>Tudo em dia!</div>'; }
+  else {
+    lp.innerHTML = pendentes.map(s=>`
+      <div class="list-item">
+        <div class="item-main">
+          <div class="item-name">${s.clienteNome}</div>
+          <div class="item-sub">${s.descricao}</div>
+          <div class="item-tiny">${s.data}</div>
+        </div>
+        <div class="item-right">
+          <div class="item-value">${fmt(s.valor)}</div>
+          <button class="toggle-btn" onclick="togglePago('${s.id}')">✓ recebido</button>
+        </div>
+      </div>`).join('');
+  }
+}
+
+function renderServicos() {
+  const el = document.getElementById('lista-servicos');
+  if (!DATA.servicos.length) { el.innerHTML='<div class="empty"><span class="empty-icon">✂️</span>Nenhum serviço ainda</div>'; return; }
+  el.innerHTML = [...DATA.servicos].reverse().map(s=>{
+    const badgeClass = s.tipo==='afiac'?'b-afiac':s.tipo==='molinha'?'b-afiac':'b-venda';
+    return `<div class="list-item">
+      <div class="item-main">
+        <div class="item-name">${s.clienteNome}</div>
+        <div class="item-sub">${s.descricao}</div>
+        ${s.obs?`<div class="item-tiny">${s.obs}</div>`:''}
+        <div class="item-tiny">${s.data} ${s.hora} · ${s.pagamento}</div>
+      </div>
+      <div class="item-right">
+        <div class="item-value">${fmt(s.valor)}</div>
+        <span class="badge ${s.pago?'b-pago':'b-pendente'}">${s.pago?'pago':'pendente'}</span><br>
+        <button class="toggle-btn" style="margin-top:6px" onclick="togglePago('${s.id}')">${s.pago?'desfazer':'✓ pago'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderClientes(filtro) {
+  const el = document.getElementById('lista-clientes');
+  let lista = DATA.clientes;
+  if (filtro) lista = lista.filter(c=>c.nome.toLowerCase().includes(filtro.toLowerCase())||(c.local||'').toLowerCase().includes(filtro.toLowerCase()));
+  if (!lista.length) { el.innerHTML='<div class="empty"><span class="empty-icon">👥</span>Nenhuma cliente encontrada</div>'; return; }
+  el.innerHTML = lista.map(c=>{
+    const nServ = DATA.servicos.filter(s=>s.clienteNome===c.nome).length;
+    const temEmp = DATA.emprestimos.find(e=>e.clienteNome===c.nome&&!e.devolveu);
+    const total = DATA.servicos.filter(s=>s.clienteNome===c.nome).reduce((sum,s)=>sum+s.valor,0);
+    const iniciais = c.nome.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+    return `<div class="card" onclick="abrirCliente('${c.id}')" style="cursor:pointer">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="avatar">${iniciais}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:15px">${c.nome}</div>
+          ${c.tel?`<div style="font-size:13px;color:var(--text2)">${c.tel}</div>`:''}
+          ${c.local?`<div style="font-size:12px;color:var(--text3)">${c.local}</div>`:''}
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          ${temEmp?'<span class="badge b-emprestado" style="display:block;margin-bottom:4px">emprestado</span>':''}
+          <span style="font-size:12px;color:var(--text3)">${nServ} serv.</span><br>
+          <span style="font-size:12px;font-weight:700;color:var(--pink-dark)">${fmt(total)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function abrirCliente(id) {
+  const c = DATA.clientes.find(c=>c.id===id);
+  if (!c) return;
+  const servicos = DATA.servicos.filter(s=>s.clienteNome===c.nome);
+  const emprestimos = DATA.emprestimos.filter(e=>e.clienteNome===c.nome&&!e.devolveu);
+  const total = servicos.reduce((s,v)=>s+v.valor,0);
+  const pendente = servicos.filter(s=>!s.pago).reduce((s,v)=>s+v.valor,0);
+  document.getElementById('modal-nome').textContent = c.nome;
+  document.getElementById('modal-content').innerHTML = `
+    ${c.tel?`<div class="detail-row"><span class="detail-key">📱 Tel</span><span>${c.tel}</span></div>`:''}
+    ${c.local?`<div class="detail-row"><span class="detail-key">📍 Local</span><span>${c.local}</span></div>`:''}
+    ${c.obs?`<div class="detail-row"><span class="detail-key">📝 Obs</span><span>${c.obs}</span></div>`:''}
+    <div class="detail-row"><span class="detail-key">📅 Desde</span><span>${c.data}</span></div>
+    <div class="detail-row"><span class="detail-key">💰 Total</span><span style="font-weight:800;color:var(--pink-dark)">${fmt(total)}</span></div>
+    ${pendente>0?`<div class="detail-row"><span class="detail-key">⏳ Pendente</span><span style="font-weight:700;color:var(--amber)">${fmt(pendente)}</span></div>`:''}
+    ${emprestimos.length?`<div class="detail-row"><span class="detail-key">📍 Emprést.</span><span>${emprestimos.map(e=>e.qtd+'x '+e.modelo).join(', ')}</span></div>`:''}
+    ${servicos.length?`<div style="margin-top:14px"><div class="card-title">Últimos serviços</div>${servicos.slice(-4).reverse().map(s=>`<div class="detail-row"><span class="detail-key">${s.data}</span><span>${s.descricao} · <strong>${fmt(s.valor)}</strong> · <span class="badge ${s.pago?'b-pago':'b-pendente'}">${s.pago?'pago':'pendente'}</span></span></div>`).join('')}</div>`:''}
+  `;
+  document.getElementById('modal-cliente').classList.add('open');
+}
+
+function renderEstoque() {
+  const resumo = document.getElementById('resumo-estoque');
+  const lista = document.getElementById('lista-estoque');
+
+  // calcula saldo por modelo (entradas positivas, saídas negativas)
+  const saldo = {};
+  DATA.estoque.forEach(e=>{
+    saldo[e.modelo]=(saldo[e.modelo]||0)+e.qtd;
+  });
+
+  if (!Object.keys(saldo).length) {
+    resumo.innerHTML='<div class="empty">Nenhum registro ainda</div>';
+    lista.innerHTML='';
+    return;
+  }
+
+  resumo.innerHTML = Object.entries(saldo).filter(([,q])=>q!==0||true).map(([m,q])=>{
+    const cls = q<=0?'sn-zero':q<=2?'sn-low':'sn-ok';
+    const entradas = DATA.estoque.filter(e=>e.modelo===m&&e.qtd>0).reduce((s,e)=>s+e.qtd,0);
+    const saidas = DATA.estoque.filter(e=>e.modelo===m&&e.qtd<0).reduce((s,e)=>s+Math.abs(e.qtd),0);
+    return `<div class="stock-row">
+      <div>
+        <div class="stock-modelo">${m}</div>
+        <div class="stock-sub">Entrou: ${entradas} · Vendido: ${saidas}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="stock-num ${cls}">${q}</div>
+        <div style="font-size:11px;color:var(--text3)">em estoque</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  lista.innerHTML = [...DATA.estoque].filter(e=>e.qtd>0).reverse().map(e=>`
+    <div class="list-item">
+      <div class="item-main">
+        <div class="item-name">${e.modelo}</div>
+        <div class="item-sub">${e.qtd} unid.${e.custo?' · custo '+fmt(e.custo):''}</div>
+      </div>
+      <div class="item-right"><div class="item-tiny">${e.data}</div></div>
+    </div>`).join('') || '<div class="empty">Nenhuma entrada</div>';
+}
+
+function populateSelects() {
+  const nomes = DATA.clientes.map(c=>c.nome);
+  ['s-cliente','e-cliente'].forEach(id=>{
+    const el = document.getElementById(id);
+    const cur = el.value;
+    el.innerHTML = `<option value="">Selecione...</option>`+nomes.map(n=>`<option value="${n}">${n}</option>`).join('');
+    if (nomes.includes(cur)) el.value=cur;
+  });
+}
+
+// ── PAGES ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  const idx=['inicio','servicos','clientes','estoque'].indexOf(name);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+}
+
+// ── MODAL ──
+function fecharModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── TOAST ──
+let toastTimer;
+function toast(msg,tipo) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show'+(tipo?' '+tipo:'');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+// ── INIT ──
+function iniciarApp() {
+  document.getElementById('app').style.display='flex';
+  document.getElementById('app').style.flexDirection='column';
+  calcularTotal();
+  fetchData();
+}
+
+carregarConfig();
+
+if (!CFG.url) {
+  // primeira vez — mostrar config
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('config-screen').style.display='flex';
+} else {
+  document.getElementById('login-screen').style.display='flex';
+}
+
+document.getElementById('modal-cliente').addEventListener('click',function(e){
+  if(e.target===this) fecharModal('modal-cliente');
+});
+</script>
+</body>
+</html>
