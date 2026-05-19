@@ -1199,7 +1199,6 @@ function agora() { return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',
 function fmt(v) { return 'R$ '+v.toFixed(2).replace('.',','); }
 
 // ── TIPO CHIPS (multi-seleção) ──
-let tiposAtivos = { afiac: true, molinha: false, venda: false };
 
 function toggleTipo(el) {
   const tipo = el.dataset.tipo;
