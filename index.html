@@ -853,6 +853,7 @@ textarea { resize: vertical; min-height: 70px; }
       <div class="field">
         <label>Cliente</label>
         <select id="e-cliente"><option value="">Selecione...</option></select>
+        <button class="btn btn-secondary btn-sm" style="margin-top:8px;width:auto" onclick="irParaNovaCliente()">➕ Nova cliente</button>
       </div>
       <div class="row-2">
         <div class="field">
@@ -899,43 +900,35 @@ textarea { resize: vertical; min-height: 70px; }
         <input type="tel" id="c-tel" placeholder="(31) 99999-0000">
       </div>
       <div class="field">
-        <label>CEP</label>
-        <div class="cep-row">
-          <input type="text" id="c-cep" placeholder="00000-000" maxlength="9" oninput="formatarCEP(this)" style="margin-bottom:0">
-          <button class="btn-cep" onclick="buscarCEP()">🔍 Buscar</button>
-        </div>
+        <label>CEP <span id="cep-spinner" style="display:none;font-size:11px;color:var(--text3)">🔍 buscando...</span></label>
+        <input type="text" id="c-cep" placeholder="00000-000" maxlength="9" oninput="formatarCEP(this)" style="margin-bottom:0">
       </div>
       <div id="campos-endereco" style="display:none">
         <div class="field">
-          <label>Logradouro</label>
-          <input type="text" id="c-rua" placeholder="Rua, Av...">
+          <label>Logradouro <span style="font-size:10px;color:var(--text3);font-weight:400">(preenchido pelo CEP)</span></label>
+          <input type="text" id="c-rua" placeholder="Rua, Av..." readonly style="background:var(--pink-soft);color:var(--text2)">
         </div>
         <div class="row-2">
           <div class="field">
-            <label>Número</label>
-            <input type="text" id="c-numero" placeholder="123">
+            <label>Bairro <span style="font-size:10px;color:var(--text3);font-weight:400">(CEP)</span></label>
+            <input type="text" id="c-bairro" placeholder="Bairro" readonly style="background:var(--pink-soft);color:var(--text2)">
           </div>
           <div class="field">
-            <label>Bairro</label>
-            <input type="text" id="c-bairro" placeholder="Bairro">
-          </div>
-        </div>
-        <div class="row-2">
-          <div class="field">
-            <label>Cidade</label>
-            <input type="text" id="c-cidade" placeholder="Cidade">
-          </div>
-          <div class="field">
-            <label>UF</label>
-            <input type="text" id="c-uf" placeholder="MG" maxlength="2">
+            <label>Cidade / UF</label>
+            <input type="text" id="c-cidade-uf" placeholder="Cidade/UF" readonly style="background:var(--pink-soft);color:var(--text2)">
+            <input type="hidden" id="c-cidade"><input type="hidden" id="c-uf">
           </div>
         </div>
         <div class="field">
-          <label>Complemento</label>
+          <label>Número ✏️</label>
+          <input type="text" id="c-numero" placeholder="123">
+        </div>
+        <div class="field">
+          <label>Complemento ✏️</label>
           <input type="text" id="c-complemento" placeholder="Apto, bloco, casa...">
         </div>
         <div class="field">
-          <label>Referência</label>
+          <label>Referência ✏️</label>
           <input type="text" id="c-referencia" placeholder="Ex: ao lado do posto">
         </div>
       </div>
@@ -992,6 +985,26 @@ textarea { resize: vertical; min-height: 70px; }
     <div class="card">
       <div class="card-title">📋 Entradas registradas</div>
       <div id="lista-estoque"><div class="empty">Nenhum registro ainda</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR ESTOQUE -->
+<div class="modal-bg" id="modal-editar-estoque">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">📦 Ajuste manual de estoque</div>
+      <button class="modal-close" onclick="fecharModal('modal-editar-estoque')">✕</button>
+    </div>
+    <div style="background:var(--amber-light);border:1px solid #F5D87A;border-radius:8px;padding:10px 12px;font-size:12px;color:var(--amber);margin-bottom:14px">
+      ⚠️ Use apenas para corrigir erros. O ajuste registra uma entrada ou saída avulsa no histórico.
+    </div>
+    <div style="font-weight:700;font-size:15px;margin-bottom:12px" id="ee-nome-modelo"></div>
+    <div class="field"><label>Quantidade atual em estoque</label><input type="number" id="ee-qtd-atual" readonly style="background:var(--pink-soft);color:var(--text2)"></div>
+    <div class="field"><label>Nova quantidade correta</label><input type="number" id="ee-qtd-nova" min="0" placeholder="Ex: 5"></div>
+    <div class="modal-btn-row">
+      <button class="btn btn-primary" style="flex:1" onclick="salvarAjusteEstoque()">📦 Aplicar ajuste</button>
     </div>
   </div>
 </div>
@@ -1369,7 +1382,7 @@ async function addCliente() {
   const c = { id:uid(), nome, tel:document.getElementById('c-tel').value.trim(), local, obs, data:hoje() };
   DATA.clientes.push(c);
   renderAll();
-  ['c-nome','c-tel','c-local','c-obs','c-cep','c-rua','c-numero','c-bairro','c-cidade','c-uf','c-complemento','c-referencia'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['c-nome','c-tel','c-local','c-obs','c-cep','c-rua','c-numero','c-bairro','c-cidade','c-uf','c-complemento','c-referencia','c-cidade-uf'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('campos-endereco').style.display='none';
   toast('Cliente salva! 💕','pink');
   await postData({ sheet:'Clientes', action:'append', headers:['id','nome','tel','local','obs','data'], row:[c.id,c.nome,c.tel,c.local,c.obs,c.data] });
@@ -1549,9 +1562,10 @@ function renderEstoque() {
         <div class="stock-modelo">${m}</div>
         <div class="stock-sub">Entrou: ${entradas} · Vendido: ${saidas}</div>
       </div>
-      <div style="text-align:right">
+      <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
         <div class="stock-num ${cls}">${q}</div>
         <div style="font-size:11px;color:var(--text3)">em estoque</div>
+        <button class="btn-edit" onclick="abrirAjusteEstoque('${m}',${q})">✏️ ajustar</button>
       </div>
     </div>`;
   }).join('');
@@ -1608,28 +1622,41 @@ function iniciarApp() {
 
 
 // ── CEP ──
+let cepTimer = null;
 function formatarCEP(el) {
   let v = el.value.replace(/\D/g,'');
   if (v.length > 5) v = v.slice(0,5)+'-'+v.slice(5,8);
   el.value = v;
+  clearTimeout(cepTimer);
+  if (v.replace(/\D/g,'').length === 8) {
+    document.getElementById('cep-spinner').style.display = 'inline';
+    cepTimer = setTimeout(buscarCEP, 400);
+  } else {
+    document.getElementById('cep-spinner').style.display = 'none';
+    document.getElementById('campos-endereco').style.display = 'none';
+  }
 }
 
 async function buscarCEP() {
   const cep = document.getElementById('c-cep').value.replace(/\D/g,'');
-  if (cep.length !== 8) return toast('CEP inválido (8 dígitos)','red');
-  toast('Buscando CEP...','');
+  if (cep.length !== 8) return;
   try {
     const r = await fetch('https://viacep.com.br/ws/'+cep+'/json/');
     const d = await r.json();
+    document.getElementById('cep-spinner').style.display = 'none';
     if (d.erro) { toast('CEP não encontrado','red'); return; }
     document.getElementById('c-rua').value = d.logradouro || '';
     document.getElementById('c-bairro').value = d.bairro || '';
     document.getElementById('c-cidade').value = d.localidade || '';
     document.getElementById('c-uf').value = d.uf || '';
+    document.getElementById('c-cidade-uf').value = (d.localidade||'') + (d.uf?' / '+d.uf:'');
     document.getElementById('campos-endereco').style.display = 'block';
     document.getElementById('c-numero').focus();
     toast('Endereço encontrado ✓','pink');
-  } catch(e) { toast('Erro ao buscar CEP','red'); }
+  } catch(e) {
+    document.getElementById('cep-spinner').style.display = 'none';
+    toast('Erro ao buscar CEP','red');
+  }
 }
 
 // ── NAVEGAÇÃO RÁPIDA ──
@@ -1805,8 +1832,35 @@ function fecharPWABanner() {
   localStorage.setItem('pwa-dismissed','1');
 }
 
+// ── AJUSTE MANUAL DE ESTOQUE ──
+let estoqueModeloAjuste = null;
+
+function abrirAjusteEstoque(modelo, qtdAtual) {
+  estoqueModeloAjuste = modelo;
+  document.getElementById('ee-nome-modelo').textContent = modelo;
+  document.getElementById('ee-qtd-atual').value = qtdAtual;
+  document.getElementById('ee-qtd-nova').value = qtdAtual;
+  document.getElementById('modal-editar-estoque').classList.add('open');
+}
+
+async function salvarAjusteEstoque() {
+  if (!estoqueModeloAjuste) return;
+  const qtdAtual = parseInt(document.getElementById('ee-qtd-atual').value) || 0;
+  const qtdNova = parseInt(document.getElementById('ee-qtd-nova').value);
+  if (isNaN(qtdNova) || qtdNova < 0) return toast('Informe uma quantidade válida','red');
+  const diff = qtdNova - qtdAtual;
+  if (diff === 0) { fecharModal('modal-editar-estoque'); return toast('Sem alteração',''); }
+  const ajuste = { id:uid(), modelo:estoqueModeloAjuste, qtd:diff, custo:0, data:hoje() };
+  DATA.estoque.push(ajuste);
+  fecharModal('modal-editar-estoque');
+  renderAll();
+  const tipo = diff > 0 ? '+'+diff+' (entrada)' : diff+' (saída)';
+  toast('Estoque ajustado '+tipo,'pink');
+  await postData({ sheet:'Estoque', action:'append', headers:['id','modelo','qtd','custo','data'], row:[ajuste.id,ajuste.modelo,ajuste.qtd,ajuste.custo,ajuste.data] });
+}
+
 // Fecha modais ao clicar no fundo
-document.getElementById('modal-editar-cliente').addEventListener('click',function(e){ if(e.target===this) fecharModal('modal-editar-cliente'); });
+document.getElementById('modal-editar-estoque').addEventListener('click',function(e){ if(e.target===this) fecharModal('modal-editar-estoque'); });
 document.getElementById('modal-editar-servico').addEventListener('click',function(e){ if(e.target===this) fecharModal('modal-editar-servico'); });
 
 setupPWA();
