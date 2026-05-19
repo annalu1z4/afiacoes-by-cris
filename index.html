@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Afiações by Cris</title>
+<link rel="manifest" id="pwa-manifest">
+<meta name="theme-color" content="#E91E8C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Afiações by Cris">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -599,6 +604,41 @@ textarea { resize: vertical; min-height: 70px; }
 .qty-label { font-size: 13px; font-weight: 600; flex: 1; }
 .qty-price { font-size: 12px; color: var(--text3); margin-right: 12px; }
 
+/* ── EDIT / DELETE ACTIONS ── */
+.item-actions { display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end; }
+.btn-edit { font-size: 11px; font-weight: 700; font-family: 'Nunito', sans-serif; background: var(--blue-light); border: 1.5px solid #C5D9F5; border-radius: 20px; padding: 4px 10px; cursor: pointer; color: var(--blue); transition: all .15s; }
+.btn-del { font-size: 11px; font-weight: 700; font-family: 'Nunito', sans-serif; background: var(--red-light); border: 1.5px solid #F5C5C5; border-radius: 20px; padding: 4px 10px; cursor: pointer; color: var(--red); transition: all .15s; }
+
+/* ── PWA INSTALL BANNER ── */
+#pwa-banner {
+  display: none;
+  position: fixed;
+  bottom: 72px;
+  left: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
+  color: white;
+  border-radius: 14px;
+  padding: 12px 14px;
+  z-index: 300;
+  box-shadow: var(--shadow-lg);
+  align-items: center;
+  gap: 10px;
+}
+#pwa-banner.show { display: flex; }
+#pwa-banner .pwa-text { flex: 1; font-size: 13px; font-weight: 600; line-height: 1.3; }
+#pwa-banner .pwa-text strong { display: block; font-size: 14px; }
+.btn-pwa-install { background: white; color: var(--pink-dark); border: none; border-radius: 10px; padding: 8px 14px; font-size: 13px; font-weight: 800; font-family: 'Nunito', sans-serif; cursor: pointer; white-space: nowrap; }
+.btn-pwa-close { background: rgba(255,255,255,0.2); border: none; border-radius: 8px; width: 28px; height: 28px; color: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* ── CEP ROW ── */
+.cep-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: flex-start; }
+.btn-cep { padding: 11px 14px; font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; background: var(--pink-light); color: var(--pink-dark); border: 1.5px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; white-space: nowrap; height: 44px; display: flex; align-items: center; }
+
+/* ── MODAL BUTTONS ROW ── */
+.modal-btn-row { display: flex; gap: 8px; margin-top: 16px; }
+.modal-btn-row .btn { margin: 0; }
+
 /* pink gradient header card */
 .hero-card {
   background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
@@ -727,6 +767,7 @@ textarea { resize: vertical; min-height: 70px; }
         <select id="s-cliente">
           <option value="">Selecione ou cadastre abaixo...</option>
         </select>
+        <button class="btn btn-secondary btn-sm" style="margin-top:8px;width:auto" onclick="irParaNovaCliente()">➕ Nova cliente</button>
       </div>
 
       <div class="field">
@@ -858,7 +899,48 @@ textarea { resize: vertical; min-height: 70px; }
         <input type="tel" id="c-tel" placeholder="(31) 99999-0000">
       </div>
       <div class="field">
-        <label>Bairro / Referência</label>
+        <label>CEP</label>
+        <div class="cep-row">
+          <input type="text" id="c-cep" placeholder="00000-000" maxlength="9" oninput="formatarCEP(this)" style="margin-bottom:0">
+          <button class="btn-cep" onclick="buscarCEP()">🔍 Buscar</button>
+        </div>
+      </div>
+      <div id="campos-endereco" style="display:none">
+        <div class="field">
+          <label>Logradouro</label>
+          <input type="text" id="c-rua" placeholder="Rua, Av...">
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>Número</label>
+            <input type="text" id="c-numero" placeholder="123">
+          </div>
+          <div class="field">
+            <label>Bairro</label>
+            <input type="text" id="c-bairro" placeholder="Bairro">
+          </div>
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>Cidade</label>
+            <input type="text" id="c-cidade" placeholder="Cidade">
+          </div>
+          <div class="field">
+            <label>UF</label>
+            <input type="text" id="c-uf" placeholder="MG" maxlength="2">
+          </div>
+        </div>
+        <div class="field">
+          <label>Complemento</label>
+          <input type="text" id="c-complemento" placeholder="Apto, bloco, casa...">
+        </div>
+        <div class="field">
+          <label>Referência</label>
+          <input type="text" id="c-referencia" placeholder="Ex: ao lado do posto">
+        </div>
+      </div>
+      <div class="field">
+        <label>Bairro / Referência rápida (sem CEP)</label>
         <input type="text" id="c-local" placeholder="Ex: Iguaçu, do lado do posto">
       </div>
       <div class="field">
@@ -924,6 +1006,61 @@ textarea { resize: vertical; min-height: 70px; }
     </div>
     <div id="modal-content"></div>
   </div>
+</div>
+
+<!-- MODAL EDITAR CLIENTE -->
+<div class="modal-bg" id="modal-editar-cliente">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">✏️ Editar cliente</div>
+      <button class="modal-close" onclick="fecharModal('modal-editar-cliente')">✕</button>
+    </div>
+    <div class="field"><label>Nome completo</label><input type="text" id="ec-nome" placeholder="Nome"></div>
+    <div class="field"><label>Telefone / WhatsApp</label><input type="tel" id="ec-tel" placeholder="(31) 99999-0000"></div>
+    <div class="field"><label>Bairro / Referência</label><input type="text" id="ec-local" placeholder="Ex: Iguaçu"></div>
+    <div class="field"><label>Observação</label><textarea id="ec-obs" placeholder="Informações úteis..."></textarea></div>
+    <div class="modal-btn-row">
+      <button class="btn btn-primary" style="flex:1" onclick="salvarEdicaoCliente()">💾 Salvar</button>
+      <button class="btn btn-danger" style="flex:1" onclick="excluirCliente()">🗑️ Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR SERVIÇO -->
+<div class="modal-bg" id="modal-editar-servico">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">✏️ Editar serviço</div>
+      <button class="modal-close" onclick="fecharModal('modal-editar-servico')">✕</button>
+    </div>
+    <div class="field"><label>Descrição</label><input type="text" id="es-descricao" placeholder="Descrição do serviço"></div>
+    <div class="field"><label>Valor (R$)</label><input type="number" id="es-valor" placeholder="0.00" step="0.50"></div>
+    <div class="field"><label>Pagamento</label>
+      <select id="es-pagamento">
+        <option>Pix</option><option>Dinheiro</option><option>Cartão crédito</option><option>Cartão débito</option><option>A receber</option>
+      </select>
+    </div>
+    <div class="field"><label>Status</label>
+      <select id="es-pago">
+        <option value="true">✅ Pago</option>
+        <option value="false">⏳ A receber</option>
+      </select>
+    </div>
+    <div class="field"><label>Observação</label><input type="text" id="es-obs" placeholder="Observação"></div>
+    <div class="modal-btn-row">
+      <button class="btn btn-primary" style="flex:1" onclick="salvarEdicaoServico()">💾 Salvar</button>
+      <button class="btn btn-danger" style="flex:1" onclick="excluirServico()">🗑️ Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- PWA INSTALL BANNER -->
+<div id="pwa-banner">
+  <div class="pwa-text"><strong>📲 Instalar como app</strong>Acesse mais rápido no celular!</div>
+  <button class="btn-pwa-install" id="pwa-install-btn">Instalar</button>
+  <button class="btn-pwa-close" onclick="fecharPWABanner()">✕</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1024,7 +1161,9 @@ function normalizeCliente(r) {
   return { id:str(r.id||r.ID), nome:str(r.nome||r.Nome), tel:str(r.tel||r.Tel), local:str(r.local||r.Local), obs:str(r.obs||r.Obs), data:str(r.data||r.Data) };
 }
 function normalizeServico(r) {
-  return { id:str(r.id||r.ID), clienteNome:str(r.clienteNome||r.ClienteNome), tipo:str(r.tipo||r.Tipo), descricao:str(r.descricao||r.Descricao), valor:parseFloat(r.valor||r.Valor||0), pagamento:str(r.pagamento||r.Pagamento), pago:String(r.pago||r.Pago||'')!=='false'&&String(r.pago||r.Pago||'')!=='FALSE', data:str(r.data||r.Data), hora:str(r.hora||r.Hora), obs:str(r.obs||r.Obs) };
+  const pagoRaw = String(r.pago||r.Pago||'false').toLowerCase().trim();
+  const pago = pagoRaw === 'true';
+  return { id:str(r.id||r.ID), clienteNome:str(r.clienteNome||r.ClienteNome), tipo:str(r.tipo||r.Tipo), descricao:str(r.descricao||r.Descricao), valor:parseFloat(r.valor||r.Valor||0), pagamento:str(r.pagamento||r.Pagamento), pago, data:str(r.data||r.Data), hora:str(r.hora||r.Hora), obs:str(r.obs||r.Obs) };
 }
 function normalizeEmp(r) {
   return { id:str(r.id||r.ID), clienteNome:str(r.clienteNome||r.ClienteNome), modelo:str(r.modelo||r.Modelo), qtd:parseInt(r.qtd||r.Qtd||1), obs:str(r.obs||r.Obs), data:str(r.data||r.Data), devolveu: String(r.devolveu||r.Devolveu||'false')==='true'||String(r.devolveu||r.Devolveu||'false')==='TRUE' };
@@ -1209,10 +1348,29 @@ async function marcarDevolveu(id) {
 async function addCliente() {
   const nome = document.getElementById('c-nome').value.trim();
   if (!nome) return toast('Informe o nome','red');
-  const c = { id:uid(), nome, tel:document.getElementById('c-tel').value.trim(), local:document.getElementById('c-local').value.trim(), obs:document.getElementById('c-obs').value.trim(), data:hoje() };
+  const rua = document.getElementById('c-rua').value.trim();
+  const numero = document.getElementById('c-numero').value.trim();
+  const bairro = document.getElementById('c-bairro').value.trim();
+  const cidade = document.getElementById('c-cidade').value.trim();
+  const uf = document.getElementById('c-uf').value.trim();
+  const complemento = document.getElementById('c-complemento').value.trim();
+  const referencia = document.getElementById('c-referencia').value.trim();
+  const cep = document.getElementById('c-cep').value.trim();
+  // Monta endereço completo se preenchido
+  let enderecoCompleto = '';
+  if (rua) {
+    enderecoCompleto = rua + (numero?' '+numero:'') + (complemento?' '+complemento:'') + (bairro?' - '+bairro:'') + (cidade?' - '+cidade:'') + (uf?' / '+uf:'');
+  }
+  const localRapido = document.getElementById('c-local').value.trim();
+  const local = enderecoCompleto || localRapido;
+  const obsExtra = [referencia, cep?'CEP: '+cep:''].filter(Boolean).join(' | ');
+  const obs = document.getElementById('c-obs').value.trim() + (obsExtra?' | '+obsExtra:'');
+
+  const c = { id:uid(), nome, tel:document.getElementById('c-tel').value.trim(), local, obs, data:hoje() };
   DATA.clientes.push(c);
   renderAll();
-  ['c-nome','c-tel','c-local','c-obs'].forEach(id=>document.getElementById(id).value='');
+  ['c-nome','c-tel','c-local','c-obs','c-cep','c-rua','c-numero','c-bairro','c-cidade','c-uf','c-complemento','c-referencia'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('campos-endereco').style.display='none';
   toast('Cliente salva! 💕','pink');
   await postData({ sheet:'Clientes', action:'append', headers:['id','nome','tel','local','obs','data'], row:[c.id,c.nome,c.tel,c.local,c.obs,c.data] });
 }
@@ -1299,6 +1457,10 @@ function renderServicos() {
         <div class="item-sub">${s.descricao}</div>
         ${s.obs?`<div class="item-tiny">${s.obs}</div>`:''}
         <div class="item-tiny">${s.data} ${s.hora} · ${s.pagamento}</div>
+        <div class="item-actions">
+          <button class="btn-edit" onclick="abrirEdicaoServico('${s.id}')">✏️ editar</button>
+          <button class="btn-del" onclick="excluirServicoById('${s.id}')">🗑️ excluir</button>
+        </div>
       </div>
       <div class="item-right">
         <div class="item-value">${fmt(s.valor)}</div>
@@ -1354,6 +1516,10 @@ function abrirCliente(id) {
     ${pendente>0?`<div class="detail-row"><span class="detail-key">⏳ Pendente</span><span style="font-weight:700;color:var(--amber)">${fmt(pendente)}</span></div>`:''}
     ${emprestimos.length?`<div class="detail-row"><span class="detail-key">📍 Emprést.</span><span>${emprestimos.map(e=>e.qtd+'x '+e.modelo).join(', ')}</span></div>`:''}
     ${servicos.length?`<div style="margin-top:14px"><div class="card-title">Últimos serviços</div>${servicos.slice(-4).reverse().map(s=>`<div class="detail-row"><span class="detail-key">${s.data}</span><span>${s.descricao} · <strong>${fmt(s.valor)}</strong> · <span class="badge ${s.pago?'b-pago':'b-pendente'}">${s.pago?'pago':'pendente'}</span></span></div>`).join('')}</div>`:''}
+    <div class="modal-btn-row" style="margin-top:18px">
+      <button class="btn btn-secondary" style="flex:1" onclick="fecharModal('modal-cliente');abrirEdicaoCliente('${c.id}')">✏️ Editar</button>
+      <button class="btn btn-danger" style="flex:1" onclick="fecharModal('modal-cliente');confirmarExcluirCliente('${c.id}')">🗑️ Excluir</button>
+    </div>
   `;
   document.getElementById('modal-cliente').classList.add('open');
 }
@@ -1439,6 +1605,211 @@ function iniciarApp() {
   calcularTotal();
   fetchData();
 }
+
+
+// ── CEP ──
+function formatarCEP(el) {
+  let v = el.value.replace(/\D/g,'');
+  if (v.length > 5) v = v.slice(0,5)+'-'+v.slice(5,8);
+  el.value = v;
+}
+
+async function buscarCEP() {
+  const cep = document.getElementById('c-cep').value.replace(/\D/g,'');
+  if (cep.length !== 8) return toast('CEP inválido (8 dígitos)','red');
+  toast('Buscando CEP...','');
+  try {
+    const r = await fetch('https://viacep.com.br/ws/'+cep+'/json/');
+    const d = await r.json();
+    if (d.erro) { toast('CEP não encontrado','red'); return; }
+    document.getElementById('c-rua').value = d.logradouro || '';
+    document.getElementById('c-bairro').value = d.bairro || '';
+    document.getElementById('c-cidade').value = d.localidade || '';
+    document.getElementById('c-uf').value = d.uf || '';
+    document.getElementById('campos-endereco').style.display = 'block';
+    document.getElementById('c-numero').focus();
+    toast('Endereço encontrado ✓','pink');
+  } catch(e) { toast('Erro ao buscar CEP','red'); }
+}
+
+// ── NAVEGAÇÃO RÁPIDA ──
+function irParaNovaCliente() {
+  showPage('clientes');
+  document.getElementById('c-nome').focus();
+  toast('Cadastre a nova cliente abaixo 💕','pink');
+}
+
+// ── EDITAR / EXCLUIR CLIENTE ──
+let clienteEditandoId = null;
+
+function abrirEdicaoCliente(id) {
+  const c = DATA.clientes.find(c=>c.id===id);
+  if (!c) return;
+  clienteEditandoId = id;
+  document.getElementById('ec-nome').value = c.nome;
+  document.getElementById('ec-tel').value = c.tel||'';
+  document.getElementById('ec-local').value = c.local||'';
+  document.getElementById('ec-obs').value = c.obs||'';
+  document.getElementById('modal-editar-cliente').classList.add('open');
+}
+
+async function salvarEdicaoCliente() {
+  const c = DATA.clientes.find(c=>c.id===clienteEditandoId);
+  if (!c) return;
+  const novoNome = document.getElementById('ec-nome').value.trim();
+  if (!novoNome) return toast('Nome obrigatório','red');
+  const nomeAntigo = c.nome;
+  c.nome = novoNome;
+  c.tel = document.getElementById('ec-tel').value.trim();
+  c.local = document.getElementById('ec-local').value.trim();
+  c.obs = document.getElementById('ec-obs').value.trim();
+  // atualizar referências ao nome nos serviços e empréstimos
+  if (nomeAntigo !== novoNome) {
+    DATA.servicos.forEach(s=>{ if(s.clienteNome===nomeAntigo) s.clienteNome=novoNome; });
+    DATA.emprestimos.forEach(e=>{ if(e.clienteNome===nomeAntigo) e.clienteNome=novoNome; });
+  }
+  fecharModal('modal-editar-cliente');
+  renderAll();
+  toast('Cliente atualizada ✓','pink');
+  await postData({ sheet:'Clientes', action:'update', id:clienteEditandoId, headers:['id','nome','tel','local','obs','data'], row:[c.id,c.nome,c.tel,c.local,c.obs,c.data] });
+}
+
+function confirmarExcluirCliente(id) {
+  clienteEditandoId = id;
+  excluirCliente();
+}
+
+async function excluirCliente() {
+  const c = DATA.clientes.find(c=>c.id===clienteEditandoId);
+  if (!c) return;
+  const temServicos = DATA.servicos.some(s=>s.clienteNome===c.nome);
+  if (temServicos) {
+    if (!confirm('Esta cliente tem serviços registrados. Deseja excluí-la mesmo assim?')) return;
+  } else {
+    if (!confirm('Excluir cliente "'+c.nome+'"?')) return;
+  }
+  DATA.clientes = DATA.clientes.filter(x=>x.id!==clienteEditandoId);
+  fecharModal('modal-editar-cliente');
+  renderAll();
+  toast('Cliente excluída','red');
+  await postData({ sheet:'Clientes', action:'delete', id:clienteEditandoId });
+}
+
+// ── EDITAR / EXCLUIR SERVIÇO ──
+let servicoEditandoId = null;
+
+function abrirEdicaoServico(id) {
+  const s = DATA.servicos.find(s=>s.id===id);
+  if (!s) return;
+  servicoEditandoId = id;
+  document.getElementById('es-descricao').value = s.descricao;
+  document.getElementById('es-valor').value = s.valor;
+  document.getElementById('es-pagamento').value = s.pagamento;
+  document.getElementById('es-pago').value = s.pago?'true':'false';
+  document.getElementById('es-obs').value = s.obs||'';
+  document.getElementById('modal-editar-servico').classList.add('open');
+}
+
+async function salvarEdicaoServico() {
+  const s = DATA.servicos.find(s=>s.id===servicoEditandoId);
+  if (!s) return;
+  s.descricao = document.getElementById('es-descricao').value.trim();
+  s.valor = parseFloat(document.getElementById('es-valor').value)||0;
+  s.pagamento = document.getElementById('es-pagamento').value;
+  s.pago = document.getElementById('es-pago').value === 'true';
+  s.obs = document.getElementById('es-obs').value.trim();
+  fecharModal('modal-editar-servico');
+  renderAll();
+  toast('Serviço atualizado ✓','pink');
+  await postData({ sheet:'Servicos', action:'update', id:servicoEditandoId, headers:['id','clienteNome','tipo','descricao','valor','pagamento','pago','data','hora','obs'], row:[s.id,s.clienteNome,s.tipo,s.descricao,s.valor,s.pagamento,s.pago,s.data,s.hora,s.obs] });
+}
+
+async function excluirServico() {
+  excluirServicoById(servicoEditandoId);
+  fecharModal('modal-editar-servico');
+}
+
+async function excluirServicoById(id) {
+  const s = DATA.servicos.find(s=>s.id===id);
+  if (!s) return;
+  if (!confirm('Excluir serviço de '+s.clienteNome+' ('+s.descricao+')?')) return;
+  // Se foi venda de alicate, estorna no estoque
+  if (s.tipo === 'venda') {
+    const partes = s.descricao.split(', ');
+    partes.forEach(parte=>{
+      const match = parte.match(/^(\d+)x (.+)$/);
+      if (match) {
+        const qtd = parseInt(match[1]);
+        const modelo = match[2].trim();
+        const estorno = { id:uid(), modelo, qtd:+qtd, custo:0, data:hoje() };
+        DATA.estoque.push(estorno);
+        postData({ sheet:'Estoque', action:'append', headers:['id','modelo','qtd','custo','data'], row:[estorno.id,estorno.modelo,estorno.qtd,estorno.custo,estorno.data] });
+      }
+    });
+    toast('Serviço excluído — estoque restaurado ✓','pink');
+  } else {
+    toast('Serviço excluído','red');
+  }
+  DATA.servicos = DATA.servicos.filter(x=>x.id!==id);
+  renderAll();
+  await postData({ sheet:'Servicos', action:'delete', id });
+}
+
+// ── PWA ──
+let deferredPrompt = null;
+
+function setupPWA() {
+  // Gera manifest dinamicamente
+  const manifest = {
+    name: 'Afiações by Cris',
+    short_name: 'AfiaCris',
+    description: 'Sistema de gestão de serviços',
+    start_url: './',
+    display: 'standalone',
+    background_color: '#FDF5FA',
+    theme_color: '#E91E8C',
+    icons: [
+      { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="32" fill="%23E91E8C"/><text x="96" y="130" font-size="110" text-anchor="middle">✂️</text></svg>', sizes: '192x192', type: 'image/svg+xml' },
+      { src: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="80" fill="%23E91E8C"/><text x="256" y="360" font-size="300" text-anchor="middle">✂️</text></svg>', sizes: '512x512', type: 'image/svg+xml' }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  document.getElementById('pwa-manifest').setAttribute('href', url);
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const banner = document.getElementById('pwa-banner');
+    if (!localStorage.getItem('pwa-dismissed')) banner.classList.add('show');
+  });
+
+  document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      fecharPWABanner();
+      if (outcome === 'accepted') toast('App instalado com sucesso! 📲','pink');
+    }
+  });
+
+  window.addEventListener('appinstalled', () => {
+    fecharPWABanner();
+    toast('App instalado! 🎉','pink');
+  });
+}
+
+function fecharPWABanner() {
+  document.getElementById('pwa-banner').classList.remove('show');
+  localStorage.setItem('pwa-dismissed','1');
+}
+
+// Fecha modais ao clicar no fundo
+document.getElementById('modal-editar-cliente').addEventListener('click',function(e){ if(e.target===this) fecharModal('modal-editar-cliente'); });
+document.getElementById('modal-editar-servico').addEventListener('click',function(e){ if(e.target===this) fecharModal('modal-editar-servico'); });
+
+setupPWA();
 
 carregarConfig();
 
