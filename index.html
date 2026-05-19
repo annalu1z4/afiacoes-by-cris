@@ -905,7 +905,7 @@ textarea { resize: vertical; min-height: 70px; }
       </div>
       <div class="field">
         <label>CEP <span id="cep-spinner" style="display:none;font-size:11px;color:var(--text3)">🔍 buscando...</span></label>
-        <input type="number" id="c-cep" placeholder="00000000" oninput="formatarCEP(this)" style="margin-bottom:0">
+        <input type="number" id="c-cep" placeholder="00000-000" maxlength="9" oninput="formatarCEP(this)" style="margin-bottom:0">
       </div>
       <div id="campos-endereco" style="display:none">
         <div class="field">
