@@ -773,9 +773,9 @@ textarea { resize: vertical; min-height: 70px; }
       <div class="field">
         <label>O que foi feito?</label>
         <div class="chip-group" id="tipo-chips">
-          <div class="chip active" data-tipo="afiac" onclick="selecionarTipo(this)">✂️ Afiação</div>
-          <div class="chip" data-tipo="molinha" onclick="selecionarTipo(this)">🔧 Molinha</div>
-          <div class="chip" data-tipo="venda" onclick="selecionarTipo(this)">🛍️ Venda alicate</div>
+          <div class="chip active" data-tipo="afiac" onclick="toggleTipo(this)">✂️ Afiação</div>
+          <div class="chip" data-tipo="molinha" onclick="toggleTipo(this)">🔧 Molinha</div>
+          <div class="chip" data-tipo="venda" onclick="toggleTipo(this)">🛍️ Venda alicate</div>
         </div>
       </div>
 
@@ -784,7 +784,7 @@ textarea { resize: vertical; min-height: 70px; }
         <label>Quantidade de afiações</label>
         <div class="counter">
           <button class="counter-btn" onclick="ajustarQtd('afiac',-1)">−</button>
-          <div class="counter-val" id="qtd-afiac">1</div>
+          <div class="counter-val" id="qtd-afiac">0</div>
           <button class="counter-btn" onclick="ajustarQtd('afiac',1)">+</button>
         </div>
       </div>
@@ -794,7 +794,7 @@ textarea { resize: vertical; min-height: 70px; }
         <label>Quantidade de molinhas</label>
         <div class="counter">
           <button class="counter-btn" onclick="ajustarQtd('molinha',-1)">−</button>
-          <div class="counter-val" id="qtd-molinha">1</div>
+          <div class="counter-val" id="qtd-molinha">0</div>
           <button class="counter-btn" onclick="ajustarQtd('molinha',1)">+</button>
         </div>
       </div>
@@ -814,6 +814,10 @@ textarea { resize: vertical; min-height: 70px; }
           <div class="modelo-card" data-modelo="Mundial 775" data-preco="45" onclick="toggleModelo(this)">
             <div class="mc-name">775</div>
             <div class="mc-price">R$ 45</div>
+          </div>
+          <div class="modelo-card" data-modelo="Mundial 772" data-preco="70" onclick="toggleModelo(this)">
+            <div class="mc-name">772</div>
+            <div class="mc-price">R$ 70</div>
           </div>
         </div>
         <div id="qtds-modelo"></div>
@@ -863,8 +867,8 @@ textarea { resize: vertical; min-height: 70px; }
             <option>Mundial 777</option>
             <option>Mundial 722</option>
             <option>Mundial 775</option>
-            <option>Mundial 522</option>
             <option>Mundial 772</option>
+            <option>Mundial 522</option>
             <option>Outro</option>
           </select>
         </div>
@@ -901,7 +905,7 @@ textarea { resize: vertical; min-height: 70px; }
       </div>
       <div class="field">
         <label>CEP <span id="cep-spinner" style="display:none;font-size:11px;color:var(--text3)">🔍 buscando...</span></label>
-        <input type="text" id="c-cep" placeholder="00000-000" maxlength="9" oninput="formatarCEP(this)" style="margin-bottom:0">
+        <input type="number" id="c-cep" placeholder="00000000" oninput="formatarCEP(this)" style="margin-bottom:0">
       </div>
       <div id="campos-endereco" style="display:none">
         <div class="field">
@@ -963,6 +967,7 @@ textarea { resize: vertical; min-height: 70px; }
             <option>Mundial 777</option>
             <option>Mundial 722</option>
             <option>Mundial 775</option>
+            <option>Mundial 772</option>
           </select>
         </div>
         <div class="field">
@@ -1080,12 +1085,12 @@ textarea { resize: vertical; min-height: 70px; }
 
 <script>
 // ── PREÇOS ──
-const PRECOS = { afiac: 15, molinha: 5, 'Mundial 777': 45, 'Mundial 722': 60, 'Mundial 775': 45 };
-const MODELOS_VENDA = ['Mundial 777','Mundial 722','Mundial 775'];
+const PRECOS = { afiac: 15, molinha: 5, 'Mundial 777': 45, 'Mundial 722': 60, 'Mundial 775': 45, 'Mundial 772': 70 };
+const MODELOS_VENDA = ['Mundial 777','Mundial 722','Mundial 775','Mundial 772'];
 
 let CFG = {};
 let DATA = { clientes: [], servicos: [], emprestimos: [], estoque: [] };
-let tipoAtual = 'afiac';
+let tiposAtivos = { afiac: true, molinha: false, venda: false };
 let modelosSelecionados = {}; // { modelo: qtd }
 
 // ── CONFIG / LOGIN ──
@@ -1179,7 +1184,9 @@ function normalizeServico(r) {
   return { id:str(r.id||r.ID), clienteNome:str(r.clienteNome||r.ClienteNome), tipo:str(r.tipo||r.Tipo), descricao:str(r.descricao||r.Descricao), valor:parseFloat(r.valor||r.Valor||0), pagamento:str(r.pagamento||r.Pagamento), pago, data:str(r.data||r.Data), hora:str(r.hora||r.Hora), obs:str(r.obs||r.Obs) };
 }
 function normalizeEmp(r) {
-  return { id:str(r.id||r.ID), clienteNome:str(r.clienteNome||r.ClienteNome), modelo:str(r.modelo||r.Modelo), qtd:parseInt(r.qtd||r.Qtd||1), obs:str(r.obs||r.Obs), data:str(r.data||r.Data), devolveu: String(r.devolveu||r.Devolveu||'false')==='true'||String(r.devolveu||r.Devolveu||'false')==='TRUE' };
+  const devRaw = r.devolveu !== undefined ? r.devolveu : (r.Devolveu !== undefined ? r.Devolveu : false);
+  const devolveu = devRaw === true || String(devRaw).toLowerCase() === 'true';
+  return { id:str(r.id||r.ID), clienteNome:str(r.clienteNome||r.ClienteNome), modelo:str(r.modelo||r.Modelo), qtd:parseInt(r.qtd||r.Qtd||1), obs:str(r.obs||r.Obs), data:str(r.data||r.Data), devolveu };
 }
 function normalizeEstoque(r) {
   return { id:str(r.id||r.ID), modelo:str(r.modelo||r.Modelo), qtd:parseInt(r.qtd||r.Qtd||0), custo:parseFloat(r.custo||r.Custo||0), data:str(r.data||r.Data) };
@@ -1191,23 +1198,30 @@ function hoje() { return new Date().toLocaleDateString('pt-BR'); }
 function agora() { return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
 function fmt(v) { return 'R$ '+v.toFixed(2).replace('.',','); }
 
-// ── TIPO CHIPS ──
-function selecionarTipo(el) {
-  document.querySelectorAll('#tipo-chips .chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  tipoAtual = el.dataset.tipo;
-  document.getElementById('bloco-afiac').style.display = tipoAtual==='afiac'?'block':'none';
-  document.getElementById('bloco-molinha').style.display = tipoAtual==='molinha'?'block':'none';
-  document.getElementById('bloco-venda').style.display = tipoAtual==='venda'?'block':'none';
-  modelosSelecionados = {};
-  atualizarModeloQtds();
+// ── TIPO CHIPS (multi-seleção) ──
+let tiposAtivos = { afiac: true, molinha: false, venda: false };
+
+function toggleTipo(el) {
+  const tipo = el.dataset.tipo;
+  tiposAtivos[tipo] = !tiposAtivos[tipo];
+  el.classList.toggle('active', tiposAtivos[tipo]);
+  document.getElementById('bloco-'+tipo).style.display = tiposAtivos[tipo] ? 'block' : 'none';
+  if (!tiposAtivos[tipo] && tipo !== 'venda') {
+    qtds[tipo] = 0;
+    document.getElementById('qtd-'+tipo).textContent = '0';
+  }
+  if (!tiposAtivos[tipo] && tipo === 'venda') {
+    modelosSelecionados = {};
+    document.querySelectorAll('.modelo-card').forEach(c=>c.classList.remove('active'));
+    atualizarModeloQtds();
+  }
   calcularTotal();
 }
 
 // ── CONTADOR ──
-let qtds = { afiac: 1, molinha: 1 };
+let qtds = { afiac: 0, molinha: 0 };
 function ajustarQtd(tipo, delta) {
-  qtds[tipo] = Math.max(1, (qtds[tipo]||1) + delta);
+  qtds[tipo] = Math.max(0, (qtds[tipo]||0) + delta);
   document.getElementById('qtd-'+tipo).textContent = qtds[tipo];
   calcularTotal();
 }
@@ -1252,17 +1266,17 @@ function calcularTotal() {
   let rows = [];
   let total = 0;
 
-  if (tipoAtual === 'afiac') {
-    const q = qtds.afiac;
-    const v = q * PRECOS.afiac;
-    rows.push(`<div class="price-row"><span>${q}x Afiação</span><span>${fmt(v)}</span></div>`);
+  if (tiposAtivos.afiac && qtds.afiac > 0) {
+    const v = qtds.afiac * PRECOS.afiac;
+    rows.push(`<div class="price-row"><span>${qtds.afiac}x Afiação</span><span>${fmt(v)}</span></div>`);
     total += v;
-  } else if (tipoAtual === 'molinha') {
-    const q = qtds.molinha;
-    const v = q * PRECOS.molinha;
-    rows.push(`<div class="price-row"><span>${q}x Molinha</span><span>${fmt(v)}</span></div>`);
+  }
+  if (tiposAtivos.molinha && qtds.molinha > 0) {
+    const v = qtds.molinha * PRECOS.molinha;
+    rows.push(`<div class="price-row"><span>${qtds.molinha}x Molinha</span><span>${fmt(v)}</span></div>`);
     total += v;
-  } else if (tipoAtual === 'venda') {
+  }
+  if (tiposAtivos.venda) {
     Object.entries(modelosSelecionados).forEach(([m,q]) => {
       const v = q * PRECOS[m];
       rows.push(`<div class="price-row"><span>${q}x ${m}</span><span>${fmt(v)}</span></div>`);
@@ -1275,29 +1289,43 @@ function calcularTotal() {
 }
 
 function getServicoDescricao() {
-  if (tipoAtual==='afiac') return `${qtds.afiac}x Afiação`;
-  if (tipoAtual==='molinha') return `${qtds.molinha}x Molinha`;
-  if (tipoAtual==='venda') return Object.entries(modelosSelecionados).map(([m,q])=>`${q}x ${m}`).join(', ');
-  return '';
+  const partes = [];
+  if (tiposAtivos.afiac && qtds.afiac > 0) partes.push(`${qtds.afiac}x Afiação`);
+  if (tiposAtivos.molinha && qtds.molinha > 0) partes.push(`${qtds.molinha}x Molinha`);
+  if (tiposAtivos.venda) Object.entries(modelosSelecionados).forEach(([m,q])=>partes.push(`${q}x ${m}`));
+  return partes.join(', ');
 }
 
 function getServicoValor() {
-  if (tipoAtual==='afiac') return qtds.afiac * PRECOS.afiac;
-  if (tipoAtual==='molinha') return qtds.molinha * PRECOS.molinha;
-  if (tipoAtual==='venda') return Object.entries(modelosSelecionados).reduce((s,[m,q])=>s+q*PRECOS[m],0);
-  return 0;
+  let total = 0;
+  if (tiposAtivos.afiac) total += qtds.afiac * PRECOS.afiac;
+  if (tiposAtivos.molinha) total += qtds.molinha * PRECOS.molinha;
+  if (tiposAtivos.venda) total += Object.entries(modelosSelecionados).reduce((s,[m,q])=>s+q*PRECOS[m],0);
+  return total;
 }
 
 // ── ADD SERVIÇO ──
 async function addServico() {
   const cn = document.getElementById('s-cliente').value;
   if (!cn) return toast('Selecione a cliente','red');
-  if (tipoAtual==='venda' && !Object.keys(modelosSelecionados).length) return toast('Selecione ao menos um modelo','red');
+
   const descricao = getServicoDescricao();
+  if (!descricao) return toast('Selecione ao menos um serviço','red');
+  if (tiposAtivos.venda && Object.keys(modelosSelecionados).length === 0 &&
+      !tiposAtivos.afiac && !tiposAtivos.molinha) return toast('Selecione ao menos um modelo','red');
+
   const valor = getServicoValor();
   const pagamento = document.getElementById('s-pagamento').value;
+
+  // Define tipo principal para categorização
+  const tipos = [];
+  if (tiposAtivos.afiac && qtds.afiac > 0) tipos.push('afiac');
+  if (tiposAtivos.molinha && qtds.molinha > 0) tipos.push('molinha');
+  if (tiposAtivos.venda && Object.keys(modelosSelecionados).length > 0) tipos.push('venda');
+  const tipo = tipos.length === 1 ? tipos[0] : 'misto';
+
   const s = {
-    id: uid(), clienteNome: cn, tipo: tipoAtual,
+    id: uid(), clienteNome: cn, tipo,
     descricao, valor, pagamento,
     pago: pagamento !== 'A receber',
     data: hoje(), hora: agora(),
@@ -1305,8 +1333,8 @@ async function addServico() {
   };
   DATA.servicos.push(s);
 
-  // desconta estoque se for venda
-  if (tipoAtual==='venda') {
+  // desconta estoque se tiver venda
+  if (tiposAtivos.venda) {
     Object.entries(modelosSelecionados).forEach(([m,q])=>{
       const e = { id:uid(), modelo:m, qtd:-q, custo:0, data:hoje() };
       DATA.estoque.push(e);
@@ -1315,14 +1343,25 @@ async function addServico() {
   }
 
   renderAll();
+
+  // reset form
   document.getElementById('s-obs').value='';
-  qtds = {afiac:1,molinha:1};
-  document.getElementById('qtd-afiac').textContent='1';
-  document.getElementById('qtd-molinha').textContent='1';
+  qtds = {afiac:0, molinha:0};
+  document.getElementById('qtd-afiac').textContent='0';
+  document.getElementById('qtd-molinha').textContent='0';
   modelosSelecionados={};
   document.querySelectorAll('.modelo-card').forEach(c=>c.classList.remove('active'));
   atualizarModeloQtds();
+  // volta chips para estado inicial (só afiação ativa)
+  tiposAtivos = { afiac:true, molinha:false, venda:false };
+  document.querySelectorAll('#tipo-chips .chip').forEach(c=>{
+    c.classList.toggle('active', c.dataset.tipo==='afiac');
+  });
+  document.getElementById('bloco-afiac').style.display='block';
+  document.getElementById('bloco-molinha').style.display='none';
+  document.getElementById('bloco-venda').style.display='none';
   calcularTotal();
+
   toast('Serviço registrado! '+fmt(valor),'pink');
   await postData({ sheet:'Servicos', action:'append', headers:['id','clienteNome','tipo','descricao','valor','pagamento','pago','data','hora','obs'], row:[s.id,s.clienteNome,s.tipo,s.descricao,s.valor,s.pagamento,s.pago,s.data,s.hora,s.obs] });
 }
@@ -1486,7 +1525,7 @@ function renderServicos() {
 
 function renderClientes(filtro) {
   const el = document.getElementById('lista-clientes');
-  let lista = DATA.clientes;
+  let lista = [...DATA.clientes].sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
   if (filtro) lista = lista.filter(c=>c.nome.toLowerCase().includes(filtro.toLowerCase())||(c.local||'').toLowerCase().includes(filtro.toLowerCase()));
   if (!lista.length) { el.innerHTML='<div class="empty"><span class="empty-icon">👥</span>Nenhuma cliente encontrada</div>'; return; }
   el.innerHTML = lista.map(c=>{
@@ -1624,11 +1663,9 @@ function iniciarApp() {
 // ── CEP ──
 let cepTimer = null;
 function formatarCEP(el) {
-  let v = el.value.replace(/\D/g,'');
-  if (v.length > 5) v = v.slice(0,5)+'-'+v.slice(5,8);
-  el.value = v;
+  const v = el.value.replace(/\D/g,'');
   clearTimeout(cepTimer);
-  if (v.replace(/\D/g,'').length === 8) {
+  if (v.length === 8) {
     document.getElementById('cep-spinner').style.display = 'inline';
     cepTimer = setTimeout(buscarCEP, 400);
   } else {
