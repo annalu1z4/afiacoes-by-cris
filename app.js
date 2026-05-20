@@ -40,10 +40,9 @@ function salvarConfig() {
   }
   err.style.display = "none";
   CFG = {
-    url,
+    url: "https://script.google.com/macros/s/AKfycbyDzqwixydlrZuhwerrOmztlBEX-7uc7WAK5p-PcoYaMFWhptvALKHsn2jmw7hj67P-/exec",
     senha: btoa(s1),
-    token:
-      "https://script.google.com/macros/s/AKfycbyDzqwixydlrZuhwerrOmztlBEX-7uc7WAK5p-PcoYaMFWhptvALKHsn2jmw7hj67P-/exec",
+    token: "@F1acoes_by_Cr1s%1327x",
   };
   localStorage.setItem("cris-cfg", JSON.stringify(CFG));
   document.getElementById("config-screen").style.display = "none";
