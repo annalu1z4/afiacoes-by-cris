@@ -23,7 +23,12 @@ let modelosSelecionados = {}; // { modelo: qtd }
 function carregarConfig() {
   try {
     const s = localStorage.getItem("cris-cfg");
-    if (s) CFG = JSON.parse(s);
+    if (s) {
+      CFG = JSON.parse(s);
+      CFG.token = "@F1acoes_by_Cr1s_1327x";
+      CFG.url =
+        "https://script.google.com/macros/s/AKfycbyDzqwixydlrZuhwerrOmztlBEX-7uc7WAK5p-PcoYaMFWhptvALKHsn2jmw7hj67P-/exec";
+    }
   } catch (e) {}
 }
 
@@ -32,18 +37,22 @@ function salvarConfig() {
   const s1 = document.getElementById("cfg-senha").value;
   const s2 = document.getElementById("cfg-senha2").value;
   const err = document.getElementById("cfg-error");
+
   if (!url) return toast("Informe a URL do Apps Script", "red");
   if (!s1) return toast("Crie uma senha", "red");
   if (s1 !== s2) {
     err.style.display = "block";
     return;
   }
+
   err.style.display = "none";
+
   CFG = {
     url: "https://script.google.com/macros/s/AKfycbyDzqwixydlrZuhwerrOmztlBEX-7uc7WAK5p-PcoYaMFWhptvALKHsn2jmw7hj67P-/exec",
     senha: btoa(s1),
-    token: "@F1acoes_by_Cr1s%1327x",
+    token: "@F1acoes_by_Cr1s_1327x",
   };
+
   localStorage.setItem("cris-cfg", JSON.stringify(CFG));
   document.getElementById("config-screen").style.display = "none";
   iniciarApp();
